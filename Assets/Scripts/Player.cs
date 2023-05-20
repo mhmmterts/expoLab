@@ -31,7 +31,7 @@ public class Player : MonoBehaviour
     private GameObject inHandItem;
 
     [SerializeField]
-    private InputActionReference interactionInput, dropInput, useInput;
+    private InputActionReference interactionInput, dropInput, useInput, openDoorInput;
 
     private RaycastHit hit;
 
@@ -88,6 +88,16 @@ public class Player : MonoBehaviour
                 inHandItem.transform.SetParent(pickUpParent.transform, pickableItem.KeepWorldPosition);
             }
         }
+    }
+
+    public void setPickUpUIVisible()
+    {
+        pickUpUI.SetActive(true);
+    }
+
+    public void setPickUpUIInvisible()
+    {
+        pickUpUI.SetActive(false);
     }
 
     private void Update()
