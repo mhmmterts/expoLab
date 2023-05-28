@@ -7,20 +7,46 @@ public class StoryModus : MonoBehaviour
 {
     public const int maxPoints = 1000;
 
-    private int collectedPoints = 0;
+    public int collectedPoints = 0;
 
     public GameObject collider1;
     public GameObject collider2;
     public GameObject collider3;
     public TextMeshProUGUI points;
 
-    private Dictionary<string, bool> rooms = new Dictionary<string, bool>();
+    private Dictionary<string, bool> objectives = new Dictionary<string, bool>();
+    private Dictionary<string, string> questions = new Dictionary<string, string>();
     // Start is called before the first frame update
     void Start()
     {
-        rooms.Add("Room1", false);
-        rooms.Add("Room2", false);
-        rooms.Add("Room3", false);
+        objectives.Add("VideoTrigger1", false);
+        objectives.Add("Room1Question1", false);
+        objectives.Add("Room1Question2", false);
+        objectives.Add("Room1Question3", false);
+        objectives.Add("Image1", false);
+        objectives.Add("Image2", false);
+        objectives.Add("VideoTrigger2", false);
+        objectives.Add("Room2Question1", false);
+        objectives.Add("Room2Question2", false);
+        objectives.Add("Room2Question3", false);
+        objectives.Add("Image3", false);
+        objectives.Add("Image4", false);
+        objectives.Add("VideoTrigger3", false);
+        objectives.Add("Room3Question1", false);
+        objectives.Add("Room3Question2", false);
+        objectives.Add("Room3Question3", false);
+        objectives.Add("Image5", false);
+        objectives.Add("Image6", false);
+
+        questions.Add("Room1Question1", "A");
+        questions.Add("Room1Question2", "B");
+        questions.Add("Room1Question3", "C");
+        questions.Add("Room2Question1", "C");
+        questions.Add("Room2Question2", "A");
+        questions.Add("Room2Question3", "B");
+        questions.Add("Room3Question1", "A");
+        questions.Add("Room3Question2", "B");
+        questions.Add("Room3Question3", "C");
     }
 
     // Update is called once per frame
@@ -28,43 +54,72 @@ public class StoryModus : MonoBehaviour
     {
 
     }
-    public Dictionary<string, bool> getRooms()
+    public Dictionary<string, bool> getObjectives()
     {
-        return rooms;
+        return objectives;
+    }
+
+    public Dictionary<string, string> getQuestions()
+    {
+        return questions;
+    }
+
+    public void addPoints(int x, string name)
+    {
+        if (objectives[name] == false)
+        {
+            collectedPoints += x;
+            points.SetText(collectedPoints.ToString());
+            objectives[name] = true;
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
         string collidedObjectName = other.gameObject.name;
-        int result;
         switch (collidedObjectName)
         {
-            case "TestCollider1":
-                Debug.Log("First room is visited.");
-                if (rooms["Room1"] == false)
+            case "ImageTrigger3":
+                if (objectives["ImageTrigger3"] == false)
                 {
-                    collectedPoints += 100;
+                    collectedPoints += 50;
                 }
                 points.SetText(collectedPoints.ToString());
-                rooms["Room1"] = true;
+                objectives["ImageTrigger3"] = true;
                 break;
-            case "TestCollider2":
-                Debug.Log("Second room is visited.");
-                if (rooms["Room2"] == false)
+            case "ImageTrigger4":
+                if (objectives["ImageTrigger4"] == false)
                 {
-                    collectedPoints += 100;
+                    collectedPoints += 50;
                 }
                 points.SetText(collectedPoints.ToString());
-                rooms["Room2"] = true;
+                objectives["ImageTrigger4"] = true;
                 break;
-            case "TestCollider3":
-                Debug.Log("Third room is visited.");
-                if (rooms["Room3"] == false)
+            case "VideoTrigger3":
+                Debug.Log("Video 3 watched.");
+                if (objectives["VideoTrigger3"] == false)
                 {
                     collectedPoints += 100;
                 }
                 points.SetText(collectedPoints.ToString());
-                rooms["Room3"] = true;
+                objectives["VideoTrigger3"] = true;
+                break;
+            case "ImageTrigger5":
+                if (objectives["ImageTrigger5"] == false)
+                {
+                    collectedPoints += 50;
+                }
+                points.SetText(collectedPoints.ToString());
+                objectives["ImageTrigger5"] = true;
+                break;
+            case "ImageTrigger6":
+                if (objectives["ImageTrigger6"] == false)
+                {
+                    collectedPoints += 50;
+                }
+                points.SetText(collectedPoints.ToString());
+                objectives["ImageTrigger6"] = true;
                 break;
             default:
                 break;

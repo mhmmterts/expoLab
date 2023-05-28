@@ -75,19 +75,22 @@ public class Player : MonoBehaviour
 
     private void PickUp(InputAction.CallbackContext obj)
     {
-        if(hit.collider != null && inHandItem == null)
+        if (hit.collider != null && inHandItem == null)
         {
             Debug.Log(hit.collider.name);
-            Debug.Log("test");
             IPickable pickableItem = hit.collider.GetComponent<IPickable>();
             if (pickableItem != null)
             {
-                Debug.Log("test2");
                 pickUpSource.Play();
                 inHandItem = pickableItem.PickUp();
                 inHandItem.transform.SetParent(pickUpParent.transform, pickableItem.KeepWorldPosition);
             }
         }
+    }
+
+    public GameObject getInHandItem()
+    {
+        return inHandItem;
     }
 
     public void setPickUpUIVisible()
@@ -119,5 +122,7 @@ public class Player : MonoBehaviour
             hit.collider.GetComponent<Highlight>()?.ToggleHighlight(true);
             pickUpUI.SetActive(true);
         }
+
+
     }
 }

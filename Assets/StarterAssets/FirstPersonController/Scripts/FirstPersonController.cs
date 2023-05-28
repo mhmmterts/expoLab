@@ -151,6 +151,11 @@ namespace StarterAssets
 			}
 		}
 
+		public void setMoveSpeed(float x)
+        {
+			MoveSpeed = x;
+        }
+
 		private void Move()
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed

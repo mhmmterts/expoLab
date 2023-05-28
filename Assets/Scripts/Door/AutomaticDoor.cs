@@ -20,7 +20,7 @@ public class AutomaticDoor : MonoBehaviour
     bool playerIsHere;
     bool doorIsOpening = false;
     private float oldYPosition;
-    public StoryModus story;
+    private StoryModus story;
 
 
     // Start is called before the first frame update
@@ -76,7 +76,7 @@ public class AutomaticDoor : MonoBehaviour
         //Debug.Log("Collided object is: " + col.gameObject.name);
         if (col.gameObject.tag == "Player")
         {
-            Dictionary<string, bool> rooms = story.getRooms();
+            Dictionary<string, bool> objectives = story.getObjectives();
             if (this.name == "Sensor1")
             {
                 playerIsHere = true;
@@ -84,7 +84,7 @@ public class AutomaticDoor : MonoBehaviour
             }
             else if (this.name == "Sensor2")
             {
-                if (rooms["Room1"] == true)
+                if (objectives["VideoTrigger1"] == true)
                 {
                     playerIsHere = true;
                     doorUI.SetActive(true);
@@ -95,7 +95,7 @@ public class AutomaticDoor : MonoBehaviour
                 }
             }else if(this.name == "Sensor3")
             {
-                if (rooms["Room1"] == true && rooms["Room2"] == true)
+                if (objectives["VideoTrigger1"] == true && objectives["VideoTrigger2"] == true)
                 {
                     playerIsHere = true;
                     doorUI.SetActive(true);
@@ -106,7 +106,7 @@ public class AutomaticDoor : MonoBehaviour
                 }
             }else if(this.name == "Sensor4")
             {
-                if (rooms["Room1"] == true && rooms["Room2"] == true && rooms["Room3"] == true)
+                if (objectives["VideoTrigger1"] == true && objectives["VideoTrigger2"] == true && objectives["VideoTrigger3"] == true)
                 {
                     playerIsHere = true;
                     doorUI.SetActive(true);
