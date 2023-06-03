@@ -12,6 +12,7 @@ public class StoryModus : MonoBehaviour
     public GameObject collider1;
     public GameObject collider2;
     public GameObject collider3;
+    public AudioSource startAudioSource;
     public TextMeshProUGUI points;
 
     private Dictionary<string, bool> objectives = new Dictionary<string, bool>();
@@ -47,6 +48,17 @@ public class StoryModus : MonoBehaviour
         questions.Add("Room3Question1", "A");
         questions.Add("Room3Question2", "B");
         questions.Add("Room3Question3", "C");
+
+        //StartCoroutine(PlayDelayed());
+    }
+
+    private IEnumerator PlayDelayed()
+    {
+        // Wait for 3 seconds
+        yield return new WaitForSeconds(3f);
+
+        // Play the audio clip
+        startAudioSource.Play();
     }
 
     // Update is called once per frame
@@ -78,52 +90,6 @@ public class StoryModus : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         string collidedObjectName = other.gameObject.name;
-        switch (collidedObjectName)
-        {
-            case "ImageTrigger3":
-                if (objectives["ImageTrigger3"] == false)
-                {
-                    collectedPoints += 50;
-                }
-                points.SetText(collectedPoints.ToString());
-                objectives["ImageTrigger3"] = true;
-                break;
-            case "ImageTrigger4":
-                if (objectives["ImageTrigger4"] == false)
-                {
-                    collectedPoints += 50;
-                }
-                points.SetText(collectedPoints.ToString());
-                objectives["ImageTrigger4"] = true;
-                break;
-            case "VideoTrigger3":
-                Debug.Log("Video 3 watched.");
-                if (objectives["VideoTrigger3"] == false)
-                {
-                    collectedPoints += 100;
-                }
-                points.SetText(collectedPoints.ToString());
-                objectives["VideoTrigger3"] = true;
-                break;
-            case "ImageTrigger5":
-                if (objectives["ImageTrigger5"] == false)
-                {
-                    collectedPoints += 50;
-                }
-                points.SetText(collectedPoints.ToString());
-                objectives["ImageTrigger5"] = true;
-                break;
-            case "ImageTrigger6":
-                if (objectives["ImageTrigger6"] == false)
-                {
-                    collectedPoints += 50;
-                }
-                points.SetText(collectedPoints.ToString());
-                objectives["ImageTrigger6"] = true;
-                break;
-            default:
-                break;
-        }
     }
 
 }
