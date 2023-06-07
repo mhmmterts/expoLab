@@ -51,6 +51,10 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             transform.position = new Vector3(0.4f, 0f, 0f);
             transform.rotation = Quaternion.Euler(-75f, -5f, transform.rotation.eulerAngles.z);
+        }else if(rb.name == "Messer")
+        {
+            transform.position = new Vector3(0.4f, 0.2f, 0.24f);
+            transform.rotation = Quaternion.Euler(352.4f, 270f, 48.21f);
         }
         return this.gameObject;
     }
