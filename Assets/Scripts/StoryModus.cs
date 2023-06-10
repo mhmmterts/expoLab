@@ -49,7 +49,7 @@ public class StoryModus : MonoBehaviour
         questions.Add("Room3Question2", "B");
         questions.Add("Room3Question3", "C");
 
-        StartCoroutine(PlayDelayed());
+        //StartCoroutine(PlayDelayed());
     }
 
     private IEnumerator PlayDelayed()

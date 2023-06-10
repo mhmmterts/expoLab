@@ -7,6 +7,12 @@ public class DemontageController : MonoBehaviour
     private Dictionary<string, bool> demontageSchritte = new Dictionary<string, bool>();
     private Player player;
     private SmartphoneCollider smartphoneCollider;
+    private GameObject screwdriver;
+    private Animator screwdriverAnimator;
+    private Animator backcoverAnimator;
+    private Animator backcover2Animator;
+    private Animator batteryAnimator;
+    private Animator simboardAnimator;
     bool playerIsHere;
     public GameObject startStepUI;
     public GameObject turnSmartphoneUI;
@@ -36,6 +42,12 @@ public class DemontageController : MonoBehaviour
     {
         GameObject playerObject = GameObject.FindWithTag("Player");
         GameObject placeTrigger = GameObject.Find("SmartphonePlaceTrigger");
+        screwdriver = GameObject.Find("Screwdriver");
+        backcover = GameObject.Find("Backcover");
+        battery = GameObject.Find("Battery");
+        microSDcard = GameObject.Find("SimBoardInvisible");
+        schrauben = GameObject.Find("Schrauben");
+        backcover2 = GameObject.Find("Backcover2");
         player = playerObject.GetComponent<Player>();
         smartphoneCollider = placeTrigger.GetComponent<SmartphoneCollider>();
         demontageSchritte.Add("TurnSmartphone", false); //Step0
@@ -47,14 +59,9 @@ public class DemontageController : MonoBehaviour
         demontageSchritte.Add("ConnectionHolder", false); //Step6  buradan devam edecennn
         demontageSchritte.Add("CameraConnector", false); //Step7
         demontageSchritte.Add("LoudspeakerCable", false); //Step8
-        demontageSchritte.Add("VibratingModule", false); //Step9 
-        //Komponenten
-        backcover = GameObject.Find("Backcover");
-        battery = GameObject.Find("Battery");
-        microSDcard = GameObject.Find("SimBoardInvisible");
-        schrauben = GameObject.Find("Schrauben");
+        demontageSchritte.Add("VibratingModule", false); //Step9
         schrauben.SetActive(false);
-        backcover2 = GameObject.Find("Backcover2");
+
 
     }
 
@@ -77,26 +84,23 @@ public class DemontageController : MonoBehaviour
         //Backcover
         if (Input.GetKeyDown(KeyCode.F) && stepCounter == 1 && playerIsHere)
         {
-            stepCounter++;
             backcover.transform.parent = null;
-            backcover.transform.position = new Vector3(-38.2779999f, 0.377999991f, 3.36500001f);
-            backcover.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+            backcoverAnimator = backcover.GetComponent<Animator>();
+            backcoverAnimator.enabled = true;
+            backcoverAnimator.Play("Backcover");
+            stepCounter++;
             step1UI.SetActive(false);
-            backcover.layer = 6;
-            backcover.AddComponent<Rigidbody>();
-            backcover.GetComponent<Rigidbody>().isKinematic = true;
         }
         //Battery
         if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 2 && playerIsHere)
         {
-            stepCounter++;
+            
             battery.transform.parent = null;
-            battery.transform.position = new Vector3(-37.9f, 0.4f, 3.2f);
-            battery.transform.rotation = Quaternion.Euler(-90f, -90f, -180f);
+            batteryAnimator = battery.GetComponent<Animator>();
+            batteryAnimator.enabled = true;
+            batteryAnimator.Play("Battery");
+            stepCounter++;
             step2UI.SetActive(false);
-            battery.layer = 6;
-            battery.AddComponent<Rigidbody>();
-            battery.GetComponent<Rigidbody>().isKinematic = true;
         }
         //Simkarten
         if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 3 && playerIsHere)
@@ -108,26 +112,28 @@ public class DemontageController : MonoBehaviour
                 Destroy(child.gameObject);
                 // Or if you want to destroy the child object immediately, use DestroyImmediate(child.gameObject);
             }
-            stepCounter++;
+            
             microSDcard.transform.parent = null;
-            microSDcard.transform.position = new Vector3(-37.6f, 0.4f, 3.2f);
-            microSDcard.transform.rotation = Quaternion.Euler(-90f, -90f, -180f);
+            simboardAnimator = microSDcard.GetComponent<Animator>();
+            simboardAnimator.enabled = true;
+            simboardAnimator.Play("Simboard");
+            stepCounter++;
             step3UI.SetActive(false);
-            microSDcard.layer = 6;
-            microSDcard.AddComponent<Rigidbody>();
-            microSDcard.GetComponent<Rigidbody>().isKinematic = true;
+            
         }
         //Schrauben
         if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 4 && playerIsHere)
         {
             GameObject schraubenImBackcover = GameObject.Find("SchraubenImBackcover");
+            screwdriverAnimator = screwdriver.GetComponent<Animator>();
+            screwdriverAnimator.enabled = true;
+            screwdriverAnimator.Play("Screwdriver");
             foreach (Transform child in schraubenImBackcover.transform)
             {
                 // Destroy the child object
                 Destroy(child.gameObject);
                 // Or if you want to destroy the child object immediately, use DestroyImmediate(child.gameObject);
             }
-
             stepCounter++;
             step4UI.SetActive(false);
             schrauben.layer = 6;
@@ -136,17 +142,17 @@ public class DemontageController : MonoBehaviour
         //Backcover2
         if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 5 && playerIsHere)
         {
-            stepCounter++;
+            
             backcover2.transform.parent = null;
-            backcover2.transform.position = new Vector3(-37.05f, 0.377999991f, 3.36500001f);
-            backcover2.transform.rotation = Quaternion.Euler(0f, 0f, 180f);
+            backcover2Animator = backcover2.GetComponent<Animator>();
+            backcover2Animator.enabled = true;
+            backcover2Animator.Play("Backcover2");
+            stepCounter++;
             step5UI.SetActive(false);
-            backcover2.layer = 6;
-            backcover2.AddComponent<Rigidbody>();
-            backcover2.GetComponent<Rigidbody>().isKinematic = true;
         }
 
     }
+
 
     public void OnTriggerEnter(Collider other)
     {

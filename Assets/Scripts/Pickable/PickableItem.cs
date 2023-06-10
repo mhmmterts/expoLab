@@ -8,12 +8,24 @@ public class PickableItem : MonoBehaviour, IPickable
     public bool KeepWorldPosition { get; private set; }
 
     private Rigidbody rb;
-
+    private GameObject screwdriver;
+    private Animator screwdriverAnimator;
+    private GameObject backcover;
+    private Animator backcoverAnimator;
+    private GameObject backcover2;
+    private Animator backcover2Animator;
+    private GameObject battery;
+    private Animator batteryAnimator;
+    private GameObject simboard;
+    private Animator simboardAnimator;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
-
+    void Start()
+    {
+        
+    }
     public GameObject PickUp()
     {
         rb = GetComponent<Rigidbody>();
@@ -58,4 +70,55 @@ public class PickableItem : MonoBehaviour, IPickable
         }
         return this.gameObject;
     }
+
+    public void AnimationFinished(string name)
+    {
+        // Code to be executed after the animation is complete
+        screwdriver = GameObject.Find("Screwdriver");
+        screwdriverAnimator = screwdriver.GetComponent<Animator>();
+        backcover = GameObject.Find("Backcover");
+        backcoverAnimator = backcover.GetComponent<Animator>();
+        backcover2 = GameObject.Find("Backcover2");
+        backcover2Animator = backcover2.GetComponent<Animator>();
+        battery = GameObject.Find("Battery");
+        batteryAnimator = battery.GetComponent<Animator>();
+        simboard = GameObject.Find("SimBoardInvisible");
+        simboardAnimator = simboard.GetComponent<Animator>();
+
+        if ("Backcover".Equals(name))
+        {
+            Debug.Log("BackcoverAnimation finished!");
+            backcoverAnimator.enabled = false;
+            backcover.AddComponent<Rigidbody>();
+            backcover.GetComponent<Rigidbody>().isKinematic = true;
+            backcover.layer = 6;
+        }
+        else if ("Screwdriver".Equals(name))
+        {
+            Debug.Log("ScrewdriverAnimation finished!");
+            screwdriverAnimator.enabled = false;
+        }
+        else if ("Battery".Equals(name))
+        {
+            Debug.Log("BatteryAnimation finished!");
+            batteryAnimator.enabled = false;
+            battery.AddComponent<Rigidbody>();
+            battery.GetComponent<Rigidbody>().isKinematic = true;
+            battery.layer = 6;
+        }else if ("Simboard".Equals(name)){
+            Debug.Log("SimBoardAnimation finished!");
+            simboardAnimator.enabled = false;
+            simboard.AddComponent<Rigidbody>();
+            simboard.GetComponent<Rigidbody>().isKinematic = true;
+            simboard.layer = 6;
+        }else if ("Backcover2".Equals(name))
+        {
+            Debug.Log("Backcover2Animation finished!");
+            backcover2Animator.enabled = false;
+            backcover2.AddComponent<Rigidbody>();
+            backcover2.GetComponent<Rigidbody>().isKinematic = true;
+            backcover2.layer = 6;
+        }
+    }
+
 }
