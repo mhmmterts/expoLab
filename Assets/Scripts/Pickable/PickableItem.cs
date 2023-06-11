@@ -10,6 +10,8 @@ public class PickableItem : MonoBehaviour, IPickable
     private Rigidbody rb;
     private GameObject screwdriver;
     private Animator screwdriverAnimator;
+    private GameObject hebelwerkzeug;
+    private Animator hebelwerkzeugAnimator;
     private GameObject backcover;
     private Animator backcoverAnimator;
     private GameObject backcover2;
@@ -18,6 +20,8 @@ public class PickableItem : MonoBehaviour, IPickable
     private Animator batteryAnimator;
     private GameObject simboard;
     private Animator simboardAnimator;
+    private GameObject motherboardConnection;
+    private Animator motherboardConnectionAnimator;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -63,7 +67,7 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             transform.position = new Vector3(0.4f, 0f, 0f);
             transform.rotation = Quaternion.Euler(-75f, -5f, transform.rotation.eulerAngles.z);
-        }else if(rb.name == "Messer")
+        }else if(rb.name == "Hebelwerkzeug")
         {
             transform.position = new Vector3(0.4f, 0.2f, 0.24f);
             transform.rotation = Quaternion.Euler(352.4f, 270f, 48.21f);
@@ -76,6 +80,8 @@ public class PickableItem : MonoBehaviour, IPickable
         // Code to be executed after the animation is complete
         screwdriver = GameObject.Find("Screwdriver");
         screwdriverAnimator = screwdriver.GetComponent<Animator>();
+        hebelwerkzeug = GameObject.Find("Hebelwerkzeug");
+        hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
         backcover = GameObject.Find("Backcover");
         backcoverAnimator = backcover.GetComponent<Animator>();
         backcover2 = GameObject.Find("Backcover2");
@@ -84,6 +90,8 @@ public class PickableItem : MonoBehaviour, IPickable
         batteryAnimator = battery.GetComponent<Animator>();
         simboard = GameObject.Find("SimBoardInvisible");
         simboardAnimator = simboard.GetComponent<Animator>();
+        motherboardConnection = GameObject.Find("MotherBoardConnection");
+        motherboardConnectionAnimator = motherboardConnection.GetComponent<Animator>();
 
         if ("Backcover".Equals(name))
         {
@@ -97,6 +105,7 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             Debug.Log("ScrewdriverAnimation finished!");
             screwdriverAnimator.enabled = false;
+            screwdriver.layer = 6;
         }
         else if ("Battery".Equals(name))
         {
@@ -118,7 +127,29 @@ public class PickableItem : MonoBehaviour, IPickable
             backcover2.AddComponent<Rigidbody>();
             backcover2.GetComponent<Rigidbody>().isKinematic = true;
             backcover2.layer = 6;
+        }else if ("Hebelwerkzeug1".Equals(name))
+        {
+            Debug.Log("Hebelwerkzeug1Animation finished!");
+            hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeugAnimator.enabled = false;
+            hebelwerkzeug.layer = 6;
+            motherboardConnectionAnimator.Play("MotherboardConnection");
         }
+    }
+
+    public void IsPickable(string pickable)
+    {
+        if ("True".Equals(pickable))
+        {
+            Debug.Log("layer 6 yapýldý");
+            screwdriver.layer = 6;
+        }
+        else
+        {
+            Debug.Log("layer 0 yapýldý");
+            screwdriver.layer = 0;
+        }
+        
     }
 
 }

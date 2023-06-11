@@ -93,6 +93,13 @@ public class Player : MonoBehaviour
         return inHandItem;
     }
 
+    public void setInHandItem()
+    {
+        Vector3 scale = inHandItem.transform.localScale;
+        inHandItem.transform.SetParent(null);
+        inHandItem.transform.localScale = scale;
+        inHandItem = null;
+    }
     public void setPickUpUIVisible()
     {
         pickUpUI.SetActive(true);

@@ -30,8 +30,11 @@ public class StoryModus : MonoBehaviour
         objectives.Add("Room2Question1", false);
         objectives.Add("Room2Question2", false);
         objectives.Add("Room2Question3", false);
-        objectives.Add("Image3", false);
-        objectives.Add("Image4", false);
+        objectives.Add("Schild1", false);
+        objectives.Add("Schild2", false);
+        objectives.Add("Schild3", false);
+        objectives.Add("Schild4", false);
+        objectives.Add("Schild5", false);
         objectives.Add("VideoTrigger3", false);
         objectives.Add("Room3Question1", false);
         objectives.Add("Room3Question2", false);

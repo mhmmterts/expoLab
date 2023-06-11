@@ -8,11 +8,13 @@ public class DemontageController : MonoBehaviour
     private Player player;
     private SmartphoneCollider smartphoneCollider;
     private GameObject screwdriver;
+    private GameObject hebelwerkzeug;
     private Animator screwdriverAnimator;
     private Animator backcoverAnimator;
     private Animator backcover2Animator;
     private Animator batteryAnimator;
     private Animator simboardAnimator;
+    private Animator hebelwerkzeugAnimator;
     bool playerIsHere;
     public GameObject startStepUI;
     public GameObject turnSmartphoneUI;
@@ -48,6 +50,7 @@ public class DemontageController : MonoBehaviour
         microSDcard = GameObject.Find("SimBoardInvisible");
         schrauben = GameObject.Find("Schrauben");
         backcover2 = GameObject.Find("Backcover2");
+        hebelwerkzeug = GameObject.Find("Hebelwerkzeug");
         player = playerObject.GetComponent<Player>();
         smartphoneCollider = placeTrigger.GetComponent<SmartphoneCollider>();
         demontageSchritte.Add("TurnSmartphone", false); //Step0
@@ -94,7 +97,7 @@ public class DemontageController : MonoBehaviour
         //Battery
         if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 2 && playerIsHere)
         {
-            
+
             battery.transform.parent = null;
             batteryAnimator = battery.GetComponent<Animator>();
             batteryAnimator.enabled = true;
@@ -112,18 +115,20 @@ public class DemontageController : MonoBehaviour
                 Destroy(child.gameObject);
                 // Or if you want to destroy the child object immediately, use DestroyImmediate(child.gameObject);
             }
-            
+
             microSDcard.transform.parent = null;
             simboardAnimator = microSDcard.GetComponent<Animator>();
             simboardAnimator.enabled = true;
             simboardAnimator.Play("Simboard");
             stepCounter++;
             step3UI.SetActive(false);
-            
+
         }
         //Schrauben
-        if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 4 && playerIsHere)
+        if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 4 && playerIsHere && "Screwdriver".Equals(player.getInHandItem().name))
         {
+            player.setInHandItem();
+            screwdriver.layer = 0;
             GameObject schraubenImBackcover = GameObject.Find("SchraubenImBackcover");
             screwdriverAnimator = screwdriver.GetComponent<Animator>();
             screwdriverAnimator.enabled = true;
@@ -142,13 +147,24 @@ public class DemontageController : MonoBehaviour
         //Backcover2
         if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 5 && playerIsHere)
         {
-            
+
             backcover2.transform.parent = null;
             backcover2Animator = backcover2.GetComponent<Animator>();
             backcover2Animator.enabled = true;
             backcover2Animator.Play("Backcover2");
             stepCounter++;
             step5UI.SetActive(false);
+        }
+        //Anschluss des Bildschirms
+        if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 6 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
+        {
+            player.setInHandItem();
+            hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
+            hebelwerkzeugAnimator.enabled = true;
+            Destroy(hebelwerkzeug.GetComponent<Rigidbody>());
+            hebelwerkzeugAnimator.Play("Hebelwerkzeug1");
+            stepCounter++;
+            step6UI.SetActive(false);
         }
 
     }
@@ -186,9 +202,13 @@ public class DemontageController : MonoBehaviour
         {
             step4UI.SetActive(true);
         }
-        if(stepCounter == 5 && !step5UI.activeSelf)
+        if (stepCounter == 5 && !step5UI.activeSelf)
         {
             step5UI.SetActive(true);
+        }
+        if (stepCounter == 6 && !step5UI.activeSelf)
+        {
+            step6UI.SetActive(true);
         }
     }
 
