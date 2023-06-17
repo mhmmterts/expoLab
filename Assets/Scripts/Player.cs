@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
     {
         return inHandItem;
     }
-
+    //Oyuncunun elindeki itemin animasyonda kullanilmasi icin parentini null yapiyoruz
     public void setInHandItem()
     {
         Vector3 scale = inHandItem.transform.localScale;

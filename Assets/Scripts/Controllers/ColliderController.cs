@@ -24,7 +24,7 @@ public class ColliderController : MonoBehaviour
     public GameObject wrongAnswer;
     public TextMeshProUGUI wrongAnswerText;
     private int currentQuestion = 0;
-    private bool questioning = false, questionAnswered = false, userInputReceived = false, answerResult = false, showQuestions = false;
+    private bool questioning = false, questionAnswered = false, userInputReceived = false, answerResult = false;
     // Start is called before the first frame update
     void Start()
     {

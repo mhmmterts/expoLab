@@ -20,15 +20,21 @@ public class PickableItem : MonoBehaviour, IPickable
     private Animator batteryAnimator;
     private GameObject simboard;
     private Animator simboardAnimator;
+    private GameObject simboard2;
+    private Animator simboardAnimator2;
+    private GameObject simboardConnector;
+    private Animator simboardConnectorAnimator;
     private GameObject motherboardConnection;
     private Animator motherboardConnectionAnimator;
+    private GameObject cameraConnector;
+    private Animator cameraConnectorAnimator;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
     void Start()
     {
-        
+
     }
     public GameObject PickUp()
     {
@@ -43,31 +49,37 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             transform.position = new Vector3(0.07f, -0.16f, 0.13f);
             transform.rotation = Quaternion.Euler(-0.5f, -178.6f, transform.rotation.eulerAngles.z);
-        }else if(rb.name == "Backcover")
-        {
-            transform.position = new Vector3(0.07f, 0.17f, 0.13f);
-            transform.rotation = Quaternion.Euler(-108f, -178.6f, transform.rotation.eulerAngles.z);
-        }else if(rb.name == "Battery")
-        {
-            transform.position = new Vector3(0.0599999987f, 0.180000007f, 0f);
-            transform.rotation = Quaternion.Euler(0,180,270);
-        }else if (rb.name == "SimBoardInvisible")
-        {
-            transform.position = new Vector3(0.0500000007f, 0.209999993f, 0f);
-            transform.rotation = Quaternion.Euler(0, 0, 270);
-        }else if (rb.name == "Schrauben")
-        {
-            transform.position = new Vector3(2.38000011f, 0.25f, 2.75000006f);
-        }else if (rb.name == "Backcover2")
+        }
+        else if (rb.name == "Backcover")
         {
             transform.position = new Vector3(0.07f, 0.17f, 0.13f);
             transform.rotation = Quaternion.Euler(-108f, -178.6f, transform.rotation.eulerAngles.z);
         }
-        else if( rb.name == "Screwdriver")
+        else if (rb.name == "Battery")
+        {
+            transform.position = new Vector3(0.0599999987f, 0.180000007f, 0f);
+            transform.rotation = Quaternion.Euler(0, 180, 270);
+        }
+        else if (rb.name == "SimBoardInvisible")
+        {
+            transform.position = new Vector3(0.0500000007f, 0.209999993f, 0f);
+            transform.rotation = Quaternion.Euler(0, 0, 270);
+        }
+        else if (rb.name == "Schrauben")
+        {
+            transform.position = new Vector3(2.38000011f, 0.25f, 2.75000006f);
+        }
+        else if (rb.name == "Backcover2")
+        {
+            transform.position = new Vector3(0.07f, 0.17f, 0.13f);
+            transform.rotation = Quaternion.Euler(-108f, -178.6f, transform.rotation.eulerAngles.z);
+        }
+        else if (rb.name == "Screwdriver")
         {
             transform.position = new Vector3(0.4f, 0f, 0f);
             transform.rotation = Quaternion.Euler(-75f, -5f, transform.rotation.eulerAngles.z);
-        }else if(rb.name == "Hebelwerkzeug")
+        }
+        else if (rb.name == "Hebelwerkzeug")
         {
             transform.position = new Vector3(0.4f, 0.2f, 0.24f);
             transform.rotation = Quaternion.Euler(352.4f, 270f, 48.21f);
@@ -90,8 +102,14 @@ public class PickableItem : MonoBehaviour, IPickable
         batteryAnimator = battery.GetComponent<Animator>();
         simboard = GameObject.Find("SimBoardInvisible");
         simboardAnimator = simboard.GetComponent<Animator>();
+        simboard2 = GameObject.Find("SimBoard");
+        simboardAnimator2 = simboard2.GetComponent<Animator>();
+        simboardConnector = GameObject.Find("SimboardConnector");
+        simboardConnectorAnimator = simboardConnector.GetComponent<Animator>();
         motherboardConnection = GameObject.Find("MotherBoardConnection");
         motherboardConnectionAnimator = motherboardConnection.GetComponent<Animator>();
+        cameraConnector = GameObject.Find("CameraConnector");
+        cameraConnectorAnimator = cameraConnector.GetComponent<Animator>();
 
         if ("Backcover".Equals(name))
         {
@@ -114,26 +132,75 @@ public class PickableItem : MonoBehaviour, IPickable
             battery.AddComponent<Rigidbody>();
             battery.GetComponent<Rigidbody>().isKinematic = true;
             battery.layer = 6;
-        }else if ("Simboard".Equals(name)){
+        }
+        else if ("Simboard".Equals(name))
+        {
             Debug.Log("SimBoardAnimation finished!");
             simboardAnimator.enabled = false;
             simboard.AddComponent<Rigidbody>();
             simboard.GetComponent<Rigidbody>().isKinematic = true;
             simboard.layer = 6;
-        }else if ("Backcover2".Equals(name))
+        }
+        else if ("Backcover2".Equals(name))
         {
             Debug.Log("Backcover2Animation finished!");
             backcover2Animator.enabled = false;
             backcover2.AddComponent<Rigidbody>();
             backcover2.GetComponent<Rigidbody>().isKinematic = true;
             backcover2.layer = 6;
-        }else if ("Hebelwerkzeug1".Equals(name))
+        }
+        else if ("Hebelwerkzeug1".Equals(name))
         {
             Debug.Log("Hebelwerkzeug1Animation finished!");
             hebelwerkzeug.AddComponent<Rigidbody>();
             hebelwerkzeugAnimator.enabled = false;
             hebelwerkzeug.layer = 6;
             motherboardConnectionAnimator.Play("MotherboardConnection");
+        }
+        else if ("Hebelwerkzeug2".Equals(name))
+        {
+            Debug.Log("Hebelwerkzeug2Animation finished!");
+            hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeugAnimator.enabled = false;
+            hebelwerkzeug.layer = 6;
+            simboardConnectorAnimator.enabled = true;
+            simboardConnectorAnimator.Play("SimboardConnector");
+        }
+        else if ("SimBoardMovement".Equals(name))
+        {
+            simboardConnectorAnimator.enabled = false;
+            Debug.Log("SimBoardMovement is active.");
+            simboardAnimator2.enabled = true;
+            simboardAnimator2.Play("SimBoard2");
+        }
+        else if ("SimBoard2".Equals(name))
+        {
+            Debug.Log("SimBoard2Animation finished!");
+            simboardAnimator2.enabled = false;
+            simboard2.AddComponent<Rigidbody>();
+            simboard2.AddComponent<MeshCollider>();
+            simboard2.AddComponent<BoxCollider>();
+            simboard2.GetComponent<Rigidbody>().isKinematic = true;
+            simboard2.layer = 6;
+        }
+        else if ("Hebelwerkzeug3".Equals(name))
+        {
+            Debug.Log("Hebelwerkzeug3Animation finished!");
+            hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeugAnimator.enabled = false;
+            hebelwerkzeug.layer = 6;
+            cameraConnectorAnimator.enabled = true;
+            cameraConnectorAnimator.Play("CamConnector");
+        }
+        else if ("CamConnector".Equals(name))
+        {
+            Debug.Log("CamConnectorAnimation finished!");
+            cameraConnectorAnimator.enabled = false;
+            cameraConnector.AddComponent<Rigidbody>();
+            cameraConnector.AddComponent<MeshCollider>();
+            cameraConnector.AddComponent<BoxCollider>();
+            cameraConnector.GetComponent<Rigidbody>().isKinematic = true;
+            cameraConnector.layer = 6;
         }
     }
 
@@ -149,7 +216,7 @@ public class PickableItem : MonoBehaviour, IPickable
             Debug.Log("layer 0 yapýldý");
             screwdriver.layer = 0;
         }
-        
+
     }
 
 }

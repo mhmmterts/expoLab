@@ -37,6 +37,8 @@ public class DemontageController : MonoBehaviour
     public GameObject battery;
     public GameObject microSDcard;
     public GameObject schrauben;
+    public GameObject simboard;
+    public GameObject cameraConnector;
     private bool demontageIsActive = false;
     private int stepCounter = 0;
     // Start is called before the first frame update
@@ -48,8 +50,10 @@ public class DemontageController : MonoBehaviour
         backcover = GameObject.Find("Backcover");
         battery = GameObject.Find("Battery");
         microSDcard = GameObject.Find("SimBoardInvisible");
+        simboard = GameObject.Find("SimBoard");
         schrauben = GameObject.Find("Schrauben");
         backcover2 = GameObject.Find("Backcover2");
+        cameraConnector = GameObject.Find("CameraConnector");
         hebelwerkzeug = GameObject.Find("Hebelwerkzeug");
         player = playerObject.GetComponent<Player>();
         smartphoneCollider = placeTrigger.GetComponent<SmartphoneCollider>();
@@ -59,7 +63,7 @@ public class DemontageController : MonoBehaviour
         demontageSchritte.Add("MicroSDcard", false); //Step3
         demontageSchritte.Add("10screws", false); //Step4
         demontageSchritte.Add("Backcover2", false); //Step5  
-        demontageSchritte.Add("ConnectionHolder", false); //Step6  buradan devam edecennn
+        demontageSchritte.Add("SimBoard", false); //Step6  
         demontageSchritte.Add("CameraConnector", false); //Step7
         demontageSchritte.Add("LoudspeakerCable", false); //Step8
         demontageSchritte.Add("VibratingModule", false); //Step9
@@ -108,14 +112,8 @@ public class DemontageController : MonoBehaviour
         //Simkarten
         if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 3 && playerIsHere)
         {
-            GameObject simboard = GameObject.Find("SimBoard");
-            foreach (Transform child in simboard.transform)
-            {
-                // Destroy the child object
-                Destroy(child.gameObject);
-                // Or if you want to destroy the child object immediately, use DestroyImmediate(child.gameObject);
-            }
-
+            Destroy(GameObject.Find("SdCardBoard"));
+            Destroy(GameObject.Find("SimCardBoard"));
             microSDcard.transform.parent = null;
             simboardAnimator = microSDcard.GetComponent<Animator>();
             simboardAnimator.enabled = true;
@@ -147,7 +145,7 @@ public class DemontageController : MonoBehaviour
         //Backcover2
         if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 5 && playerIsHere)
         {
-
+            simboard.transform.parent = null;
             backcover2.transform.parent = null;
             backcover2Animator = backcover2.GetComponent<Animator>();
             backcover2Animator.enabled = true;
@@ -159,6 +157,8 @@ public class DemontageController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 6 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
         {
             player.setInHandItem();
+            cameraConnector.transform.parent = null;
+            hebelwerkzeug.layer = 0;
             hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
             hebelwerkzeugAnimator.enabled = true;
             Destroy(hebelwerkzeug.GetComponent<Rigidbody>());
@@ -166,7 +166,30 @@ public class DemontageController : MonoBehaviour
             stepCounter++;
             step6UI.SetActive(false);
         }
-
+        //Anschluss des Simboards
+        if(Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 7 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
+        {
+            player.setInHandItem();
+            hebelwerkzeug.layer = 0;
+            hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
+            hebelwerkzeugAnimator.enabled = true;
+            Destroy(hebelwerkzeug.GetComponent<Rigidbody>());
+            hebelwerkzeugAnimator.Play("Hebelwerkzeug2");
+            stepCounter++;
+            step7UI.SetActive(false);
+        }
+        //Camera connector
+        if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 8 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
+        {
+            player.setInHandItem();
+            hebelwerkzeug.layer = 0;
+            hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
+            hebelwerkzeugAnimator.enabled = true;
+            Destroy(hebelwerkzeug.GetComponent<Rigidbody>());
+            hebelwerkzeugAnimator.Play("Hebelwerkzeug3");
+            stepCounter++;
+            step8UI.SetActive(false);
+        }
     }
 
 
@@ -209,6 +232,14 @@ public class DemontageController : MonoBehaviour
         if (stepCounter == 6 && !step5UI.activeSelf)
         {
             step6UI.SetActive(true);
+        }
+        if (stepCounter == 7 && !step6UI.activeSelf)
+        {
+            step7UI.SetActive(true);
+        }
+        if (stepCounter == 8 && !step7UI.activeSelf)
+        {
+            step8UI.SetActive(true);
         }
     }
 
