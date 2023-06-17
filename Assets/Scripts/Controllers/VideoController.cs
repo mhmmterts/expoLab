@@ -12,30 +12,32 @@ public class VideoController : MonoBehaviour
     public VideoPlayer videoPlayer;
     public GameObject infoUI;
     public GameObject question1;
+    public GameObject question1AnswerUI;
     public GameObject question2;
+    public GameObject question2AnswerUI;
     public GameObject question3;
+    public GameObject question3AnswerUI;
     public GameObject trueAnswer;
     public GameObject wrongAnswer;
     private FirstPersonController player;
-    private bool userInputReceived = false;
     bool playerIsHere;
     private StoryModus story;
     private int currentQuestion = 0;
     public TextMeshProUGUI wrongAnswerText;
-    private bool answerResult = false;
-    private bool questioning = false;
+    private bool questioning = false, questionAnswered = false, userInputReceived = false, answerResult = false;
     // Update is called once per frame
     void Update()
     {
         if (playerIsHere)
         {
-            if (Input.GetKeyDown(KeyCode.X) && !videoPlayer.isPlaying && questioning != true)
+            if (Input.GetKeyDown(KeyCode.X) && !videoPlayer.isPlaying && !questioning)
             {
                 StartVideo();
                 player.setMoveSpeed(0);
+                currentQuestion = 0;
             }
 
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) && !videoPlayer.isPlaying && !questioning)
             {
                 RestartVideo();
                 player.setMoveSpeed(0);
@@ -43,11 +45,7 @@ public class VideoController : MonoBehaviour
 
             if (videoPlayer.isPaused)
             {
-                if (currentQuestion == 4)
-                {
-                    player.setMoveSpeed(4);
-                }
-                else if (currentQuestion == 0)
+                if (currentQuestion == 0)
                 {
                     currentQuestion++;
                     questioning = true;
@@ -66,43 +64,56 @@ public class VideoController : MonoBehaviour
 
     private IEnumerator HandleQuestions()
     {
-        Dictionary<string, bool> objectives = story.getObjectives();
-        if (currentQuestion == 1 && !question1.activeSelf)
+        if (questioning)
         {
-            Debug.Log("currentQuestion" + currentQuestion);
-            question1.SetActive(true);
-            yield return StartCoroutine(WaitForUserInput());
-            objectives[question1.gameObject.name] = true;
-            userInputReceived = false;
-            yield return StartCoroutine(ActivateUIForSeconds(3f));
-            userInputReceived = false;
-            question1.SetActive(false);
-            currentQuestion++;
-        }
-        else if (currentQuestion == 2 && !question2.activeSelf)
-        {
-            Debug.Log("currentQuestion" + currentQuestion);
-            question2.SetActive(true);
-            yield return StartCoroutine(WaitForUserInput());
-            objectives[question2.gameObject.name] = true;
-            userInputReceived = false;
-            yield return StartCoroutine(ActivateUIForSeconds(3f));
-            userInputReceived = false;
-            question2.SetActive(false);
-            currentQuestion++;
-        }
-        else if (currentQuestion == 3 && !question3.activeSelf)
-        {
-            Debug.Log("currentQuestion" + currentQuestion);
-            question3.SetActive(true);
-            yield return StartCoroutine(WaitForUserInput());
-            objectives[question3.gameObject.name] = true;
-            userInputReceived = false;
-            yield return StartCoroutine(ActivateUIForSeconds(3f));
-            userInputReceived = false;
-            question3.SetActive(false);
-            currentQuestion++;
-            questioning = false;
+            Dictionary<string, bool> objectives = story.getObjectives();
+            if (currentQuestion == 2 && null == question2 || currentQuestion == 3 && null == question3 || currentQuestion == 4)
+            {
+                player.setMoveSpeed(4);
+                questioning = false;
+            }
+            else if (currentQuestion == 1 && !question1.activeSelf && !questionAnswered && question1AnswerUI != null)
+            {
+                questionAnswered = true;
+                Debug.Log("currentQuestion" + currentQuestion);
+                question1.SetActive(true);
+                yield return StartCoroutine(WaitForUserInput());
+                objectives[question1.gameObject.name] = true;
+                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f, question1AnswerUI));
+                userInputReceived = false;
+                question1.SetActive(false);
+                yield return StartCoroutine(WaitForInput(question1AnswerUI));
+                currentQuestion++;
+            }
+            else if (currentQuestion == 2 && !question2.activeSelf && !question1AnswerUI.activeSelf && !questionAnswered && question2 != null)
+            {
+                questionAnswered = true;
+                Debug.Log("currentQuestion" + currentQuestion);
+                question2.SetActive(true);
+                yield return StartCoroutine(WaitForUserInput());
+                objectives[question2.gameObject.name] = true;
+                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f, question2AnswerUI));
+                userInputReceived = false;
+                question2.SetActive(false);
+                yield return StartCoroutine(WaitForInput(question2AnswerUI));
+                currentQuestion++;
+            }
+            else if (currentQuestion == 3 && !question3.activeSelf && !question2AnswerUI.activeSelf && !questionAnswered && question3 != null)
+            {
+                questionAnswered = true;
+                Debug.Log("currentQuestion" + currentQuestion);
+                question3.SetActive(true);
+                yield return StartCoroutine(WaitForUserInput());
+                objectives[question3.gameObject.name] = true;
+                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f, question3AnswerUI));
+                userInputReceived = false;
+                question3.SetActive(false);
+                yield return StartCoroutine(WaitForInput(question3AnswerUI));
+                currentQuestion++;
+            }
         }
     }
 
@@ -118,7 +129,19 @@ public class VideoController : MonoBehaviour
         }
     }
 
-
+    private IEnumerator WaitForInput(GameObject answerUI)
+    {
+        while (!userInputReceived)
+        {
+            yield return null; // Yield control back to the Unity engine
+            if (Input.anyKeyDown)
+            {
+                answerUI.SetActive(false);
+                questionAnswered = false;
+                break;
+            }
+        }
+    }
 
     private IEnumerator WaitForUserInput()
     {
@@ -149,7 +172,7 @@ public class VideoController : MonoBehaviour
         }
     }
 
-    private IEnumerator ActivateUIForSeconds(float duration)
+    private IEnumerator ActivateUIForSeconds(float duration, GameObject answerUI)
     {
         if (answerResult == true)
         {
@@ -163,6 +186,7 @@ public class VideoController : MonoBehaviour
             yield return new WaitForSeconds(duration);
             wrongAnswer.SetActive(false);
         }
+        answerUI.SetActive(true);
         yield return null;
     }
 
@@ -174,6 +198,7 @@ public class VideoController : MonoBehaviour
 
             if (questions[question1.gameObject.name] == answer)
             {
+                Debug.Log(question1.gameObject.name + " and its answer is " + questions[question1.gameObject.name]);
                 story.addPoints(50, question1.gameObject.name);
                 answerResult = true;
             }

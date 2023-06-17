@@ -24,6 +24,10 @@ public class StoryModus : MonoBehaviour
         objectives.Add("Room1Question1", false);
         objectives.Add("Room1Question2", false);
         objectives.Add("Room1Question3", false);
+        objectives.Add("Room1Question4", false);
+        objectives.Add("Room1Question5", false);
+        objectives.Add("Room1Question6", false);
+        objectives.Add("Room1Question7", false);
         objectives.Add("Image1", false);
         objectives.Add("Image2", false);
         objectives.Add("VideoTrigger2", false);
@@ -45,6 +49,10 @@ public class StoryModus : MonoBehaviour
         questions.Add("Room1Question1", "A");
         questions.Add("Room1Question2", "B");
         questions.Add("Room1Question3", "C");
+        questions.Add("Room1Question4", "C");
+        questions.Add("Room1Question5", "C");
+        questions.Add("Room1Question6", "C");
+        questions.Add("Room1Question7", "C");
         questions.Add("Room2Question1", "C");
         questions.Add("Room2Question2", "A");
         questions.Add("Room2Question3", "B");

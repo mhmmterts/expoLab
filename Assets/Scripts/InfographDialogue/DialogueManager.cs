@@ -2,57 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
 
-	public Text nameText;
-	public Text dialogueText;
+    public Text nameText;
+    public Text dialogueText;
+    private bool dialogueIsOpen = false;
 
 
-	private Queue<string> sentences;
+    private Queue<string> sentences;
+    private Queue<GameObject> images;
 
-	// Use this for initialization
-	void Start()
-	{
-		sentences = new Queue<string>();
-	}
+    // Use this for initialization
+    void Start()
+    {
+        sentences = new Queue<string>();
+        images = new Queue<GameObject>();
+    }
 
-	public void StartDialogue(Dialogue dialogue)
-	{
-		Debug.Log("starting conversation with" + dialogue.name);
+    public void StartDialogue(Dialogue dialogue)
+    {
+        Debug.Log("starting conversation with" + dialogue.name);
+        dialogueIsOpen = true;
+        nameText.text = dialogue.name;
 
-		nameText.text = dialogue.name;
+        sentences.Clear();
 
-		sentences.Clear();
+        foreach (string sentence in dialogue.sentences)
+        {
+            sentences.Enqueue(sentence);
+        }
+        foreach (GameObject image in dialogue.objects)
+        {
+            images.Enqueue(image);
+        }
 
-		foreach (string sentence in dialogue.sentences)
-		{
-			sentences.Enqueue(sentence);
-		}
+        DisplayNextSentence(dialogue);
+    }
 
-		DisplayNextSentence();
-	}
+    public bool controlDialogue()
+    {
+        if (dialogueIsOpen)
+        {
+            return true;
+        }
+        return false;
+    }
 
-	public void DisplayNextSentence()
-	{
-		if (sentences.Count == 0)
-		{
-			return;
-		}
+    public bool DisplayNextSentence(Dialogue dialogue)
+    {
+        if (sentences.Count == 0)
+        {
+            foreach (GameObject infograph in dialogue.objects)
+            {
+                if (dialogue.objects.Length - 1 != Array.IndexOf(dialogue.objects, infograph))
+                {
+                    infograph.SetActive(false);
+                }
+            }
 
-		string sentence = sentences.Dequeue();
-		StopAllCoroutines();
-		StartCoroutine(TypeSentence(sentence));
-	}
+            dialogueIsOpen = false;
+            return false;
+        }
 
-	IEnumerator TypeSentence(string sentence)
-	{
-		dialogueText.text = "";
-		foreach (char letter in sentence.ToCharArray())
-		{
-			dialogueText.text += letter;
-			yield return null;
-		}
-	}
+        string sentence = sentences.Dequeue();
+        GameObject image = images.Dequeue();
+        image.SetActive(true);
+        StopAllCoroutines();
+        StartCoroutine(TypeSentence(sentence));
+        return true;
+    }
+
+    IEnumerator TypeSentence(string sentence)
+    {
+        dialogueText.text = "";
+        foreach (char letter in sentence.ToCharArray())
+        {
+            dialogueText.text += letter;
+            yield return null;
+        }
+    }
 }
