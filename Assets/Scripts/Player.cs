@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     private GameObject pickUpUI;
 
     public GameObject backcoverUI;
+    public GameObject batteryUI;
     internal void AddHealth(int healthBoost)
     {
         Debug.Log($"Health boosted by {healthBoost}");
