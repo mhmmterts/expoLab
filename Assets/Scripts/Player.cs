@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject pickUpUI;
 
+    public GameObject backcoverUI;
     internal void AddHealth(int healthBoost)
     {
         Debug.Log($"Health boosted by {healthBoost}");
@@ -117,6 +118,7 @@ public class Player : MonoBehaviour
         {
             hit.collider.GetComponent<Highlight>()?.ToggleHighlight(false);
             pickUpUI.SetActive(false);
+            backcoverUI.SetActive(false);
         }
 
         if (inHandItem != null)
@@ -127,7 +129,14 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out hit, hitRange, pickableLayerMask))
         {
             hit.collider.GetComponent<Highlight>()?.ToggleHighlight(true);
-            pickUpUI.SetActive(true);
+            if (hit.collider.name.Equals("Backcover"))
+            {
+                backcoverUI.SetActive(true);
+            }
+            else
+            {
+                pickUpUI.SetActive(true);
+            }
         }
 
 

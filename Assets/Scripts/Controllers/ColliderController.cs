@@ -23,6 +23,7 @@ public class ColliderController : MonoBehaviour
     public GameObject trueAnswer;
     public GameObject wrongAnswer;
     public TextMeshProUGUI wrongAnswerText;
+    private GameObject pointsUI;
     private int currentQuestion = 0;
     private bool questioning = false, questionAnswered = false, userInputReceived = false, answerResult = false;
     // Start is called before the first frame update
@@ -30,6 +31,7 @@ public class ColliderController : MonoBehaviour
     {
         playerIsHere = false;
         GameObject playerObject = GameObject.FindWithTag("Player");
+        pointsUI = GameObject.Find("CollectedPointsUI");
         player = playerObject.GetComponent<FirstPersonController>();
         if (playerObject != null)
         {
@@ -43,7 +45,7 @@ public class ColliderController : MonoBehaviour
     {
         if (playerIsHere)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E) && !isOpen && !questioning)
             {
                 openImageUI.SetActive(false);
                 imageUI.SetActive(true);
@@ -52,6 +54,7 @@ public class ColliderController : MonoBehaviour
                 isOpen = true;
                 currentQuestion = 0;
                 isFinished = false;
+                pointsUI.SetActive(false);
             }
             if (Input.GetKeyDown(KeyCode.C) && dialogueManager.controlDialogue())
             {
@@ -59,9 +62,21 @@ public class ColliderController : MonoBehaviour
                 if (!isOpen)
                 {
                     isFinished = true;
+                    pointsUI.SetActive(true);
+                    if (null == question1)
+                    {
+                        player.setMoveSpeed(4);
+                        foreach (GameObject image in dialogue.objects)
+                        {
+                            image.SetActive(false);
+                        }
+                        imageUI.SetActive(false);
+                        openImageUI.SetActive(true);
+                        story.addPoints(50, this.gameObject.name);
+                    }
                 }
             }
-            if (isFinished)
+            if (isFinished && null != question1)
             {
                 if (currentQuestion == 0)
                 {
@@ -91,7 +106,7 @@ public class ColliderController : MonoBehaviour
                 imageUI.SetActive(false);
                 openImageUI.SetActive(true);
             }
-            else if (currentQuestion == 1 && !question1.activeSelf && !questionAnswered && question1AnswerUI != null)
+            else if (currentQuestion == 1 && !question1.activeSelf && !questionAnswered && question1 != null)
             {
                 questionAnswered = true;
                 Debug.Log("currentQuestion" + currentQuestion);
@@ -99,13 +114,18 @@ public class ColliderController : MonoBehaviour
                 yield return StartCoroutine(WaitForUserInput());
                 objectives[question1.gameObject.name] = true;
                 userInputReceived = false;
-                yield return StartCoroutine(ActivateUIForSeconds(3f, question1AnswerUI));
-                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f));
+                if (null != question1AnswerUI)
+                {
+                    question1AnswerUI.SetActive(true);
+                    userInputReceived = false;
+                    yield return StartCoroutine(WaitForInput(question1AnswerUI));
+                }
+                questionAnswered = false;
                 question1.SetActive(false);
-                yield return StartCoroutine(WaitForInput(question1AnswerUI));
                 currentQuestion++;
             }
-            else if (currentQuestion == 2 && !question2.activeSelf && !question1AnswerUI.activeSelf && !questionAnswered && question2 != null)
+            else if (currentQuestion == 2 && !question2.activeSelf && !questionAnswered && question2 != null)
             {
                 questionAnswered = true;
                 Debug.Log("currentQuestion" + currentQuestion);
@@ -113,13 +133,18 @@ public class ColliderController : MonoBehaviour
                 yield return StartCoroutine(WaitForUserInput());
                 objectives[question2.gameObject.name] = true;
                 userInputReceived = false;
-                yield return StartCoroutine(ActivateUIForSeconds(3f, question2AnswerUI));
-                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f));
+                if (null != question2AnswerUI)
+                {
+                    question2AnswerUI.SetActive(true);
+                    userInputReceived = false;
+                    yield return StartCoroutine(WaitForInput(question2AnswerUI));
+                }
+                questionAnswered = false;
                 question2.SetActive(false);
-                yield return StartCoroutine(WaitForInput(question2AnswerUI));
                 currentQuestion++;
             }
-            else if (currentQuestion == 3 && !question3.activeSelf && !question2AnswerUI.activeSelf && !questionAnswered && question3 != null)
+            else if (currentQuestion == 3 && !question3.activeSelf && !questionAnswered && question3 != null)
             {
                 questionAnswered = true;
                 Debug.Log("currentQuestion" + currentQuestion);
@@ -127,10 +152,15 @@ public class ColliderController : MonoBehaviour
                 yield return StartCoroutine(WaitForUserInput());
                 objectives[question3.gameObject.name] = true;
                 userInputReceived = false;
-                yield return StartCoroutine(ActivateUIForSeconds(3f, question3AnswerUI));
-                userInputReceived = false;
+                yield return StartCoroutine(ActivateUIForSeconds(3f));
+                if (question3AnswerUI != null)
+                {
+                    question3AnswerUI.SetActive(true);
+                    userInputReceived = false;
+                    yield return StartCoroutine(WaitForInput(question3AnswerUI));
+                }
+                questionAnswered = false;
                 question3.SetActive(false);
-                yield return StartCoroutine(WaitForInput(question3AnswerUI));
                 currentQuestion++;
             }
         }
@@ -179,7 +209,7 @@ public class ColliderController : MonoBehaviour
         }
     }
 
-    private IEnumerator ActivateUIForSeconds(float duration, GameObject answerUI)
+    private IEnumerator ActivateUIForSeconds(float duration)
     {
         if (answerResult)
         {
@@ -193,7 +223,6 @@ public class ColliderController : MonoBehaviour
             yield return new WaitForSeconds(duration);
             wrongAnswer.SetActive(false);
         }
-        answerUI.SetActive(true);
         yield return null;
     }
 
