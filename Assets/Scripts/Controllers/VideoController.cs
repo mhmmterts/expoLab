@@ -67,7 +67,7 @@ public class VideoController : MonoBehaviour
         if (questioning)
         {
             Dictionary<string, bool> objectives = story.getObjectives();
-            if (currentQuestion == 2 && null == question2 || currentQuestion == 3 && null == question3 || currentQuestion == 4)
+            if (currentQuestion == 1 && null == question1 || currentQuestion == 2 && null == question2 || currentQuestion == 3 && null == question3 || currentQuestion == 4)
             {
                 player.setMoveSpeed(4);
                 questioning = false;

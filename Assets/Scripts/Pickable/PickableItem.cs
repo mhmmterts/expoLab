@@ -28,6 +28,8 @@ public class PickableItem : MonoBehaviour, IPickable
     private Animator motherboardConnectionAnimator;
     private GameObject cameraConnector;
     private Animator cameraConnectorAnimator;
+    private GameObject cableConnector;
+    private Animator cableConnectorAnimator;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -110,6 +112,8 @@ public class PickableItem : MonoBehaviour, IPickable
         motherboardConnectionAnimator = motherboardConnection.GetComponent<Animator>();
         cameraConnector = GameObject.Find("CameraConnector");
         cameraConnectorAnimator = cameraConnector.GetComponent<Animator>();
+        cableConnector = GameObject.Find("SoundCable");
+        cableConnectorAnimator = cableConnector.GetComponent<Animator>();
 
         if ("Backcover".Equals(name))
         {
@@ -201,6 +205,25 @@ public class PickableItem : MonoBehaviour, IPickable
             cameraConnector.AddComponent<BoxCollider>();
             cameraConnector.GetComponent<Rigidbody>().isKinematic = true;
             cameraConnector.layer = 6;
+        }
+        else if ("Hebelwerkzeug4".Equals(name))
+        {
+            Debug.Log("Hebelwerkzeug4Animation finished!");
+            hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeugAnimator.enabled = false;
+            hebelwerkzeug.layer = 6;
+            cableConnectorAnimator.enabled = true;
+            cableConnectorAnimator.Play("SoundCable");
+        }
+        else if ("SoundCable".Equals(name))
+        {
+            Debug.Log("CableConnectorAnimation finished!");
+            cableConnectorAnimator.enabled = false;
+            cableConnector.AddComponent<Rigidbody>();
+            cableConnector.AddComponent<MeshCollider>();
+            cableConnector.AddComponent<BoxCollider>();
+            cableConnector.GetComponent<Rigidbody>().isKinematic = true;
+            cableConnector.layer = 6;
         }
     }
 

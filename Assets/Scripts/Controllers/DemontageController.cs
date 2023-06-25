@@ -39,6 +39,7 @@ public class DemontageController : MonoBehaviour
     public GameObject schrauben;
     public GameObject simboard;
     public GameObject cameraConnector;
+    public GameObject soundCable;
     private bool demontageIsActive = false;
     private int stepCounter = 0;
     // Start is called before the first frame update
@@ -54,6 +55,7 @@ public class DemontageController : MonoBehaviour
         schrauben = GameObject.Find("Schrauben");
         backcover2 = GameObject.Find("Backcover2");
         cameraConnector = GameObject.Find("CameraConnector");
+        soundCable = GameObject.Find("SoundCable");
         hebelwerkzeug = GameObject.Find("Hebelwerkzeug");
         player = playerObject.GetComponent<Player>();
         smartphoneCollider = placeTrigger.GetComponent<SmartphoneCollider>();
@@ -65,7 +67,7 @@ public class DemontageController : MonoBehaviour
         demontageSchritte.Add("Backcover2", false); //Step5  
         demontageSchritte.Add("SimBoard", false); //Step6  
         demontageSchritte.Add("CameraConnector", false); //Step7
-        demontageSchritte.Add("LoudspeakerCable", false); //Step8
+        demontageSchritte.Add("SoundCable", false); //Step8
         demontageSchritte.Add("VibratingModule", false); //Step9
         schrauben.SetActive(false);
 
@@ -181,6 +183,7 @@ public class DemontageController : MonoBehaviour
         //Camera connector
         if (Input.GetKeyDown(KeyCode.E) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 8 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
         {
+            soundCable.transform.parent = null;
             player.setInHandItem();
             hebelwerkzeug.layer = 0;
             hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
@@ -189,6 +192,18 @@ public class DemontageController : MonoBehaviour
             hebelwerkzeugAnimator.Play("Hebelwerkzeug3");
             stepCounter++;
             step8UI.SetActive(false);
+        }
+        //SoundCable connector
+        if (Input.GetKeyDown(KeyCode.F) && smartphoneCollider.controlSmartPhonePosition() && stepCounter == 9 && playerIsHere && "Hebelwerkzeug".Equals(player.getInHandItem().name))
+        {
+            player.setInHandItem();
+            hebelwerkzeug.layer = 0;
+            hebelwerkzeugAnimator = hebelwerkzeug.GetComponent<Animator>();
+            hebelwerkzeugAnimator.enabled = true;
+            Destroy(hebelwerkzeug.GetComponent<Rigidbody>());
+            hebelwerkzeugAnimator.Play("Hebelwerkzeug4");
+            stepCounter++;
+            step9UI.SetActive(false);
         }
     }
 
@@ -240,6 +255,10 @@ public class DemontageController : MonoBehaviour
         if (stepCounter == 8 && !step7UI.activeSelf)
         {
             step8UI.SetActive(true);
+        }
+        if (stepCounter == 9 && !step8UI.activeSelf)
+        {
+            step9UI.SetActive(true);
         }
     }
 
