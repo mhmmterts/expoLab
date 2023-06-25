@@ -271,6 +271,8 @@ public class VideoController : MonoBehaviour
     {
         if (col.gameObject.tag == "Player")
         {
+            Dictionary<string, bool> objectives = story.getObjectives();
+            objectives[this.name] = true;
             playerIsHere = true;
             infoUI.SetActive(true);
         }

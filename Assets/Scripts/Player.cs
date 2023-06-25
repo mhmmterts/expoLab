@@ -17,6 +17,13 @@ public class Player : MonoBehaviour
 
     public GameObject backcoverUI;
     public GameObject batteryUI;
+    public GameObject simCardUI;
+    public GameObject schraubenUI;
+    public GameObject gehause2UI;
+    public GameObject simboardUI;
+    public GameObject cameraUI;
+    public GameObject hauptplatineUI;
+    public GameObject soundCableUI;
     internal void AddHealth(int healthBoost)
     {
         Debug.Log($"Health boosted by {healthBoost}");
@@ -120,6 +127,16 @@ public class Player : MonoBehaviour
             hit.collider.GetComponent<Highlight>()?.ToggleHighlight(false);
             pickUpUI.SetActive(false);
             backcoverUI.SetActive(false);
+            batteryUI.SetActive(false);
+            hauptplatineUI.SetActive(false);
+            simCardUI.SetActive(false);
+            schraubenUI.SetActive(false);
+            gehause2UI.SetActive(false);
+            simboardUI.SetActive(false);
+            simboardUI.SetActive(false);
+            cameraUI.SetActive(false);
+            soundCableUI.SetActive(false);
+            hauptplatineUI.SetActive(false);
         }
 
         if (inHandItem != null)
@@ -133,6 +150,42 @@ public class Player : MonoBehaviour
             if (hit.collider.name.Equals("Backcover"))
             {
                 backcoverUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("Battery"))
+            {
+                batteryUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("Hauptplatine"))
+            {
+                hauptplatineUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("SimBoardInvisible"))
+            {
+                simCardUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("Schrauben"))
+            {
+                schraubenUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("Backcover2"))
+            {
+                gehause2UI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("SimBoard"))
+            {
+                simboardUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("CameraConnector"))
+            {
+                cameraUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("SoundCable"))
+            {
+                soundCableUI.SetActive(true);
+            }
+            else if (hit.collider.name.Equals("Hauptplatine"))
+            {
+                hauptplatineUI.SetActive(true);
             }
             else
             {

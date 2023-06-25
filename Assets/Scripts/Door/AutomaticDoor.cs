@@ -283,7 +283,7 @@ public class AutomaticDoor : MonoBehaviour
             }
             else if (this.name == "Sensor3")
             {
-                if (objectives["VideoTrigger1"] == true && objectives["VideoTrigger2"] == true)
+                if (objectives["Image3"] == true && objectives["Image4"] == true)
                 {
                     playerIsHere = true;
                     doorUI.SetActive(true);
@@ -295,7 +295,7 @@ public class AutomaticDoor : MonoBehaviour
             }
             else if (this.name == "Sensor4")
             {
-                if (objectives["VideoTrigger1"] == true && objectives["VideoTrigger2"] == true && objectives["VideoTrigger3"] == true)
+                if (objectives["Image8"] == true && objectives["Image9"] == true)
                 {
                     playerIsHere = true;
                     doorUI.SetActive(true);

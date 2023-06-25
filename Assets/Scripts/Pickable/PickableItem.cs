@@ -30,6 +30,9 @@ public class PickableItem : MonoBehaviour, IPickable
     private Animator cameraConnectorAnimator;
     private GameObject cableConnector;
     private Animator cableConnectorAnimator;
+    private GameObject hauptplatine;
+    private Animator hauptplatineAnimator;
+    public GameObject step11UI;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -86,6 +89,22 @@ public class PickableItem : MonoBehaviour, IPickable
             transform.position = new Vector3(0.4f, 0.2f, 0.24f);
             transform.rotation = Quaternion.Euler(352.4f, 270f, 48.21f);
         }
+        else if(rb.name == "SoundCable")
+        {
+            transform.position = new Vector3(0, -0.26f, 0);
+        }else if(rb.name == "CameraConnector")
+        {
+            transform.position = new Vector3(0.06f, 0.23f, 0);
+        }
+        else if (rb.name == "SimBoard")
+        {
+            transform.position = new Vector3(0.06f, 0.23f, 0);
+        }
+        else if (rb.name == "Hauptplatine")
+        {
+            transform.position = new Vector3(0.06f, 0.2f, 0);
+            transform.rotation = Quaternion.Euler(-93.42f, 180f, 0);
+        }
         return this.gameObject;
     }
 
@@ -114,6 +133,8 @@ public class PickableItem : MonoBehaviour, IPickable
         cameraConnectorAnimator = cameraConnector.GetComponent<Animator>();
         cableConnector = GameObject.Find("SoundCable");
         cableConnectorAnimator = cableConnector.GetComponent<Animator>();
+        hauptplatine = GameObject.Find("Hauptplatine");
+        hauptplatineAnimator = hauptplatine.GetComponent<Animator>();
 
         if ("Backcover".Equals(name))
         {
@@ -157,6 +178,8 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             Debug.Log("Hebelwerkzeug1Animation finished!");
             hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeug.AddComponent<MeshCollider>();
+            hebelwerkzeug.AddComponent<BoxCollider>();
             hebelwerkzeugAnimator.enabled = false;
             hebelwerkzeug.layer = 6;
             motherboardConnectionAnimator.Play("MotherboardConnection");
@@ -165,6 +188,8 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             Debug.Log("Hebelwerkzeug2Animation finished!");
             hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeug.AddComponent<MeshCollider>();
+            hebelwerkzeug.AddComponent<BoxCollider>();
             hebelwerkzeugAnimator.enabled = false;
             hebelwerkzeug.layer = 6;
             simboardConnectorAnimator.enabled = true;
@@ -191,6 +216,8 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             Debug.Log("Hebelwerkzeug3Animation finished!");
             hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeug.AddComponent<MeshCollider>();
+            hebelwerkzeug.AddComponent<BoxCollider>();
             hebelwerkzeugAnimator.enabled = false;
             hebelwerkzeug.layer = 6;
             cameraConnectorAnimator.enabled = true;
@@ -210,6 +237,8 @@ public class PickableItem : MonoBehaviour, IPickable
         {
             Debug.Log("Hebelwerkzeug4Animation finished!");
             hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeug.AddComponent<MeshCollider>();
+            hebelwerkzeug.AddComponent<BoxCollider>();
             hebelwerkzeugAnimator.enabled = false;
             hebelwerkzeug.layer = 6;
             cableConnectorAnimator.enabled = true;
@@ -220,10 +249,31 @@ public class PickableItem : MonoBehaviour, IPickable
             Debug.Log("CableConnectorAnimation finished!");
             cableConnectorAnimator.enabled = false;
             cableConnector.AddComponent<Rigidbody>();
-            cableConnector.AddComponent<MeshCollider>();
-            cableConnector.AddComponent<BoxCollider>();
+            cableConnector.GetComponent<BoxCollider>().enabled = true;
             cableConnector.GetComponent<Rigidbody>().isKinematic = true;
             cableConnector.layer = 6;
+        }
+        else if ("Hebelwerkzeug5".Equals(name))
+        {
+            Debug.Log("Hebelwerkzeug5Animation finished!");
+            hebelwerkzeug.AddComponent<Rigidbody>();
+            hebelwerkzeug.AddComponent<MeshCollider>();
+            hebelwerkzeug.AddComponent<BoxCollider>();
+            hebelwerkzeugAnimator.enabled = false;
+            hebelwerkzeug.layer = 6;
+            hauptplatineAnimator.enabled = true;
+            hauptplatineAnimator.Play("Hauptplatine");
+        }else if ("Hauptplatine".Equals(name))
+        {
+            Debug.Log("HauptplatineAnimation finished!");
+            hauptplatineAnimator.enabled = false;
+            hauptplatine.AddComponent<Rigidbody>();
+            hauptplatine.AddComponent<MeshCollider>();
+            hauptplatine.AddComponent<BoxCollider>();
+            hauptplatine.GetComponent<Rigidbody>().isKinematic = true;
+            hauptplatine.layer = 6;
+            step11UI.SetActive(true);
+           
         }
     }
 

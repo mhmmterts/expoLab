@@ -294,6 +294,7 @@ public class ColliderController : MonoBehaviour
             Dictionary<string, bool> objectives = story.getObjectives();
             if (this.name.Contains("Image") || this.name.Contains("Schild"))
             {
+                objectives[this.name] = true;
                 playerIsHere = true;
                 openImageUI.SetActive(true);
             }
